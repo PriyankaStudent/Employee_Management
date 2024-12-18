@@ -13,49 +13,55 @@ const EmployeeForm = ({ fetchEmployees, setShowForm }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [back,setBack]=useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // Clear errors on input
+    setErrors({ ...errors, [e.target.name]: "" }); 
   };
+
+  const handleBack = (e)=>{
+    setBack(true);
+    if(back){
+    setShowForm(false);
+    fetchEmployees();}
+  }
 
   const validateForm = () => {
     const newErrors = {};
 
-    // Name validation
+  
     if (!form.name.trim() || !form.name.includes(" ")) {
       newErrors.name = "Please provide both first and last name.";
     }
 
-    // Employee ID validation
+  
     if (!/^[a-zA-Z0-9]{1,10}$/.test(form.employee_id)) {
       newErrors.employee_id = "Employee ID must be alphanumeric and max 10 characters.";
     }
 
-    // Email validation
     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.email)) {
       newErrors.email = "Invalid email format.";
     }
 
-    // Phone Number validation
+  
     if (!/^\d{10}$/.test(form.phone_number)) {
       newErrors.phone_number = "Phone number must be exactly 10 digits.";
     }
 
-    // Date of Joining validation
     const today = new Date().toISOString().split("T")[0];
     if (!form.date_of_joining || form.date_of_joining > today) {
       newErrors.date_of_joining = "Date of Joining cannot be a future date.";
     }
 
-    // Role validation
+  
     if (!form.role.trim()) {
       newErrors.role = "Role is required.";
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Returns true if no errors
+    return Object.keys(newErrors).length === 0; 
   };
 
   const handleSubmit = async (e) => {
@@ -63,10 +69,10 @@ const EmployeeForm = ({ fetchEmployees, setShowForm }) => {
     if (!validateForm()) return;
 
     try {
-      await axios.post("https://employee-management-8tkm.onrender.com/api/employees", form);
+      await axios.post("http://localhost:5000/api/employees", form);
       setSuccessMessage("Employee added successfully!");
-      fetchEmployees(); // Refresh employee list
-      setShowForm(false); // Hide the form
+      fetchEmployees(); 
+      setShowForm(false); 
     } catch (error) {
       console.error(error);
       setSuccessMessage("Failed to add employee. Duplicate Employee ID or Email.");
@@ -88,6 +94,7 @@ const EmployeeForm = ({ fetchEmployees, setShowForm }) => {
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit} className="employee-form">
       <h2>Add Employee</h2>
 
@@ -158,6 +165,10 @@ const EmployeeForm = ({ fetchEmployees, setShowForm }) => {
 
       {successMessage && <p className="success">{successMessage}</p>}
     </form>
+    <button type="button" onClick={handleBack}>
+        Back
+      </button>
+    </>
   );
 };
 

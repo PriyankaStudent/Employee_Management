@@ -16,7 +16,7 @@ const ManagerLogin = ({ onSuccess }) => {
 
   return (
     <div className="modal">
-      <h2>Manager Login</h2>
+      <h2>Add Employees</h2>
       <input
         type="text"
         placeholder="Username"
