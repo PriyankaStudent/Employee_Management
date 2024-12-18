@@ -63,7 +63,7 @@ const EmployeeForm = ({ fetchEmployees, setShowForm }) => {
     if (!validateForm()) return;
 
     try {
-      await axios.post("http://localhost:5000/api/employees", form);
+      await axios.post("https://employee-management-8tkm.onrender.com/api/employees", form);
       setSuccessMessage("Employee added successfully!");
       fetchEmployees(); // Refresh employee list
       setShowForm(false); // Hide the form
